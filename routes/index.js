@@ -1,7 +1,7 @@
 var express = require("express");
 var router = express.Router();
 
-const api_list = ["/yys/v1/{game_id}", "/steam/v1/{steam_id}"];
+const api_list = ["/yys/v1/{game_id}", "/steam/v1/game/{steam_id}", "/steam/v1/user/:user_id"];
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
