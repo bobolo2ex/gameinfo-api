@@ -84,7 +84,9 @@ router.get("/v1/user/:user_id", function (req, res, next) {
                         }
                         userinfo.name = cres.$(".persona_name_text_content").text().replace(/[\r\t\n]/g, "");
                         userinfo.avatar = cres.$(".playerAvatar img").attr("src");
-                        let gameinfo = body.match(/var rgGames = (.*?);/)[1];
+                        let gameinfo = body.match(/var rgGames = (.*?)\}\];/)[1];
+                        // 匹配后需要补全的部分
+                        gameinfo = gameinfo + "}]";
                         userinfo.games = JSON.parse(gameinfo);
                         res.json(userinfo);
                     } catch (e) {
