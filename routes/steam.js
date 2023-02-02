@@ -58,7 +58,13 @@ router.get("/v1/user/:user_id", function (req, res, next) {
         return;
     }
 
-    let url = `https://steamcommunity.com/id/${user_id}/games/?tab=all`;
+    let url = "";
+    if (isNaN(user_id)) {
+        url = `https://steamcommunity.com/id/${user_id}/games/?tab=all`;
+    } else {
+        url = `https://steamcommunity.com/profiles/${user_id}/games/?tab=all`;
+    }
+
     console.log(url);
 
     user.queue([
@@ -81,8 +87,11 @@ router.get("/v1/user/:user_id", function (req, res, next) {
                             name: "",
                             avatar: "",
                             games: [],
-                        }
-                        userinfo.name = cres.$(".persona_name_text_content").text().replace(/[\r\t\n]/g, "");
+                        };
+                        userinfo.name = cres
+                            .$(".persona_name_text_content")
+                            .text()
+                            .replace(/[\r\t\n]/g, "");
                         userinfo.avatar = cres.$(".playerAvatar img").attr("src");
                         let gameinfo = body.match(/var rgGames = (.*?)\}\];/)[1];
                         // 匹配后需要补全的部分
