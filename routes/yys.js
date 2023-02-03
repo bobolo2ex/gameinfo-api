@@ -38,28 +38,34 @@ router.get("/v1/:game_id", function (req, res, next) {
         return;
     }
 
+    let url = `https://www.yystv.cn/g/${req.params.game_id}`;
+
     c.queue([
         {
-            uri: `https://www.yystv.cn/g/${req.params.game_id}`,
+            uri: url,
             jQuery: true,
 
             // The global callback won't be called
             callback: (cerror, cres, cdone) => {
                 if (cerror) {
+                    console.log('cerror', req.params.game_id);
                     res.json([]);
                 } else {
                     try {
                         let body = cres.body;
 
                         // match var gameinfo
-                        let gameinfo = body.match(/var gameinfo = (.*?);/)[1];
+                        let gameinfo = body.match(/var gameinfo\ =\ (.*?)\]\};/)[1];
+                        // console.log(gameinfo)
+                        // 匹配后需要补全的部分
+                        gameinfo = gameinfo + "]}";
                         gameinfo = JSON.parse(gameinfo);
-                        console.log(cres.request.headers);
+                        console.log('get yys gameinfo', url);
+                        // console.log(cres.request.headers);
 
-                        // console.log(gameinfo);
-                        // res.send(gameinfo);
                         res.json(gameinfo);
                     } catch (e) {
+                        console.log('catch', e);
                         res.json([]);
                     }
                 }
